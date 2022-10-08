@@ -88,7 +88,37 @@ deleteUser({ params }, res) {
     })
     .catch(err => res.status(400).json(err));
 },
+addFriend({ params, body }, res) {
+    User.findOneAndUpdate(
+      { _id: params.Id },
+      { $push: { friends: body } },
+      { new: true, runValidators: true}
+    )
+      .then(dbFriendData => {
+        if (!dbFriendData) {
+          res.status(404).json({ message: 'No user found with this Id!' });
+          return;
+        }
+        res.json(dbFriendData);
+      })
+      .catch(err => res.json(err));
+  },
 
+  deleteFriend(req, res) {
+    User.findOneAndUpdate({
+      _id: req.params.Id}, 
+        {$pull: {friends: {$in: req.params.friendId}}},
+        {new: true} 
+    )
+      .then(dbFriendData => {
+          if (!dbFriendData) {
+              res.status(404).json({message: 'No user found with this ID!'});
+              return;
+          }
+        res.json(dbFriendData);
+    })
+    .catch(err => res.status(400).json(err));
+},
 
 };
 

@@ -1,12 +1,13 @@
 const router = require('express').Router();
 
-const { get } = require('mongoose');
 const {
     getAllUsers,
     getUserById,
     createUser,
     updateUser,
     deleteUser,
+    addFriend,
+    deleteFriend
 }  = require('../../controllers/user-controller');
 
 router
@@ -20,6 +21,12 @@ router
     .put(updateUser)
     .delete(deleteUser);
 
+router
+    .route('/:id/friends/')
+    .post(addFriend);
+router
+    .route('/:id/friends/:friendId')
+    .delete(deleteFriend);
 module.exports = router;
 
 
