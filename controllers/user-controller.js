@@ -1,11 +1,15 @@
-const router = require('express').Router();
+const User = require('../models/User');
 
 const userController = {
 
 getAllUsers(req, res) {
     User.find({})
     .populate({
-        path: 'reactions',
+        path: 'thoughts',
+        select: '-__v'
+    })
+    .populate({
+        path: 'friends',
         select: '-__v'
     })
     .select('-__v')
@@ -20,7 +24,11 @@ getAllUsers(req, res) {
 getUserById({ params }, res) {
     User.findOne({ _id: params.id })
     .populate({
-        path: 'comments',
+        path: 'thoughts',
+        select: '-__v'
+    })
+    .populate({
+        path: 'friends',
         select: '-__v'
     })
     .select('-__v')
